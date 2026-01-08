@@ -4,12 +4,12 @@ import com.stapubox.turfBooking.dto.requestDTO.BulkSlotRequest;
 import com.stapubox.turfBooking.entity.Slot;
 import com.stapubox.turfBooking.service.SlotService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,10 +18,21 @@ public class SlotController {
     private final SlotService slotService;
 
     @PostMapping("/venues/{venueId}/slots")
-    public List<Slot> addSlots(
+    public ResponseEntity<List<Slot>> addSlots(
             @PathVariable Long venueId,
             @RequestBody BulkSlotRequest request
     ) {
-        return slotService.addSlots(venueId, request);
+        List<Slot> slots = slotService.addSlots(venueId, request);
+        return new ResponseEntity<>(slots, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/slots/{slotId}")
+    public ResponseEntity<Map<String, String>> deleteSlot(@PathVariable Long slotId) {
+        slotService.deleteSlot(slotId);
+        return new ResponseEntity<>(
+                Map.of("message", "Slot deleted successfully"),
+                HttpStatus.OK
+        );
     }
 }

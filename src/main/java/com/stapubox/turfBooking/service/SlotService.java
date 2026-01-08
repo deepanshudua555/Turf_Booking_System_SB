@@ -5,8 +5,12 @@ import com.stapubox.turfBooking.dto.responseDTO.OverlappingSlotDto;
 import com.stapubox.turfBooking.dto.requestDTO.SlotRequest;
 import com.stapubox.turfBooking.entity.Slot;
 import com.stapubox.turfBooking.entity.Venue;
+import com.stapubox.turfBooking.enums.BookingStatus;
+import com.stapubox.turfBooking.exception.BookingSlotException;
 import com.stapubox.turfBooking.exception.InvalidSlotTimeException;
+import com.stapubox.turfBooking.exception.ResourceNotFoundException;
 import com.stapubox.turfBooking.exception.SlotOverlapException;
+import com.stapubox.turfBooking.repository.BookingRepository;
 import com.stapubox.turfBooking.repository.SlotRepository;
 import com.stapubox.turfBooking.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,7 @@ public class SlotService {
 
     private final SlotRepository slotRepository;
     private final VenueRepository venueRepository;
+    private final BookingRepository bookingRepository;
 
     @Transactional
     public List<Slot> addSlots(Long venueId, BulkSlotRequest request) {
@@ -105,5 +110,20 @@ public class SlotService {
 
         //save only when NO overlap
         return slotRepository.saveAll(savedSlots);
+    }
+
+    public void deleteSlot(Long slotId) {
+
+        Slot slot = slotRepository.findById(slotId)
+                .orElseThrow(() -> new ResourceNotFoundException("Slot not found"));
+
+        boolean isBooked = bookingRepository
+                .existsBySlotIdAndStatus(slotId, BookingStatus.BOOKED);
+
+        if (isBooked) {
+            throw new BookingSlotException("Cannot delete a booked slot");
+        }
+
+        slotRepository.delete(slot);
     }
 }

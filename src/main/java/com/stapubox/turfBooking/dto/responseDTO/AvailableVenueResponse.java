@@ -1,8 +1,13 @@
 package com.stapubox.turfBooking.dto.responseDTO;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
 public class AvailableVenueResponse {
 
     public Long venueId;
@@ -11,17 +16,4 @@ public class AvailableVenueResponse {
     public LocalDateTime startTime;
     public LocalDateTime endTime;
 
-    public AvailableVenueResponse(
-            Long venueId,
-            String venueName,
-            Long slotId,
-            LocalDateTime startTime,
-            LocalDateTime endTime
-    ) {
-        this.venueId = venueId;
-        this.venueName = venueName;
-        this.slotId = slotId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
 }
