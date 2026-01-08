@@ -1,5 +1,7 @@
 package com.stapubox.turfBooking.controller;
 
+import com.stapubox.turfBooking.dto.requestDTO.BookingRequest;
+import com.stapubox.turfBooking.dto.responseDTO.BookingResponse;
 import com.stapubox.turfBooking.entity.Booking;
 import com.stapubox.turfBooking.service.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -8,16 +10,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class BookingController {
-    private final BookingService service;
+    private final BookingService bookingService;
 
     @PostMapping("/bookings")
-    public Booking book(@RequestParam Long slotId,
-                        @RequestParam String userName) {
-        return service.book(slotId, userName);
+    public BookingResponse book(@RequestBody BookingRequest request) {
+        return bookingService.book(
+                request.getSlotId(),
+                request.getUserName()
+        );
     }
 
+
     @PutMapping("/bookings/{id}/cancel")
-    public Booking cancel(@PathVariable Long id) {
-        return service.cancel(id);
+    public BookingResponse cancel(@PathVariable Long id) {
+        return bookingService.cancel(id);
     }
 }

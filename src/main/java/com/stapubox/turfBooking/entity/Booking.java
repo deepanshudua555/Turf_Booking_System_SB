@@ -1,5 +1,6 @@
 package com.stapubox.turfBooking.entity;
 
+import com.stapubox.turfBooking.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,8 @@ public class Booking {
 
     private String userName;
 
-    private String status; // BOOKED / CANCELLED
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status; // BOOKED, AVAILABLE
 
     @CreationTimestamp
     @Column(updatable = false)

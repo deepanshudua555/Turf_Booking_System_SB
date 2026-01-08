@@ -47,5 +47,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BookingSlotException.class)
+    public ResponseEntity<Map<String, Object>> handleBookingSlot(
+            BookingSlotException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", "error");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
 }
 
