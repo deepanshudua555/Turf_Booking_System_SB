@@ -36,12 +36,10 @@ public class VenueService {
     }
 
     public List<AvailableVenueResponse> getAvailableVenues(
-            Long sportId,
-            LocalDateTime start,
-            LocalDateTime end
+
     ) {
         List<Slot> slots =
-                slotRepository.findAvailableSlots(sportId, start, end);
+                slotRepository.findAvailableSlots();
 
         return slots.stream()
                 .map(s -> new AvailableVenueResponse(

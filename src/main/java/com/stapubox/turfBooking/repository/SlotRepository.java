@@ -18,17 +18,11 @@ public interface SlotRepository extends JpaRepository<Slot, Long> {
 
     @Query("""
         select s from Slot s
-        where s.venue.sportId = :sportId
-        and s.startTime >= :start
-        and s.endTime <= :end
-        and s.id not in (
+        where s.id not in (
             select b.slot.id from Booking b where b.status = 'BOOKED'
         )
     """)
     List<Slot> findAvailableSlots(
-            Long sportId,
-            LocalDateTime start,
-            LocalDateTime end
     );
 }
 

@@ -29,11 +29,9 @@ public class VenueController {
 
     @GetMapping("/available")
     public List<AvailableVenueResponse> availableVenues(
-            @RequestParam Long sportId,
-            @RequestParam LocalDateTime start,
-            @RequestParam LocalDateTime end
+
     ) {
-        return venueService.getAvailableVenues(sportId, start, end);
+        return venueService.getAvailableVenues();
     }
 
 }
